@@ -14,25 +14,30 @@ namespace HexLife
         {
             InitializeComponent();
 
-            _gol = new HexGameOfLife();
+            _gol = new HexGameOfLife(100, 100);
+            _gol.ResetToSingleCell();
 
             var timer = new Timer(1000);
-            timer.Elapsed += (sender, args) => Canvas.InvalidateSurface();
+            timer.Elapsed += (sender, args) =>
+            {
+                _gol.MakeNextGeneration();
+                Canvas.InvalidateSurface();
+            };
             timer.Start();
         }
 
         private void SKCanvasView_OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
-            var grid = _gol.Grid;
             var canvas = e.Surface.Canvas;
             canvas.Clear();
 
+            var grid = _gol.Grid;
             for (var i = 0; i < grid.Rows; i++)
-            for (var j = 0; j < grid.Columns; j++)
-            {
-                if (grid[i, j].IsAlive)
-                    DrawCell(canvas, i, j);
-            }
+                for (var j = 0; j < grid.Columns; j++)
+                {
+                    if (grid[i, j].IsAlive)
+                        DrawCell(canvas, i, j);
+                }
         }
 
         private void DrawCell(SKCanvas canvas, int i, int j)
@@ -47,15 +52,15 @@ namespace HexLife
 
             float x, y;
 
-            if (j % 2 == 0)
+            if (i % 2 == 0)
             {
-                x = i * 2 * CellRadius + CellRadius;
-                y = j * (float)Math.Sqrt(3) * CellRadius + CellRadius;
+                x = j * 2 * CellRadius + CellRadius;
+                y = i * (float)Math.Sqrt(3) * CellRadius + CellRadius;
             }
             else
             {
-                x = i * 2 * CellRadius + CellRadius + CellRadius;
-                y = j * (float)Math.Sqrt(3) * CellRadius + CellRadius;
+                x = j * 2 * CellRadius + CellRadius + CellRadius;
+                y = i * (float)Math.Sqrt(3) * CellRadius + CellRadius;
             }
 
             canvas.DrawCircle(x, y, CellRadius, paint);

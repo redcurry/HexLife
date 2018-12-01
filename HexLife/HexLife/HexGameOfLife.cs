@@ -1,50 +1,57 @@
 ﻿using System;
+using System.Linq;
 
 namespace HexLife
 {
     public class HexGameOfLife
     {
-        public HexGrid Grid => CreateRandomGrid();
+        public HexGrid Grid { get; private set; }
 
-        public HexGameOfLife()
+        public int[] SurviveNeighborCount = {2, 4};
+        public int[] BornNeighborCount = {1, 2};
+
+        public HexGameOfLife(int width, int height)
         {
+            Grid = new HexGrid(height, width);
         }
 
-        private HexGrid CreateRandomGrid()
+        public void ResetToSingleCell()
         {
-            var grid = new HexGrid(100, 100);
-            var random = new Random();
-            for (var i = 0; i < 100; i++)
-                for (var j = 0; j < 100; j++)
-                    grid[i, j].IsAlive = random.NextDouble() < 0.5;
-            return grid;
-        }
-    }
-
-    public class HexGrid
-    {
-        private readonly HexCell[,] _grid;
-
-        public HexGrid(int rows, int cols)
-        {
-            Rows = rows;
-            Columns = cols;
-
-            _grid = new HexCell[rows, cols];
-
-            for (int i = 0; i < rows; i++)
-                for (int j = 0; j < cols; j++)
-                    _grid[i, j] = new HexCell();
+            Grid.Clear();
+            GetCenterCell().IsAlive = true;
         }
 
-        public int Rows { get; }
-        public int Columns { get; }
+        public void MakeNextGeneration()
+        {
+            var nextGrid = new HexGrid(Grid.Rows, Grid.Columns);
 
-        public HexCell this[int i, int j] => _grid[i, j];
-    }
+            for (int i = 0; i < Grid.Rows; i++)
+                for (int j = 0; j < Grid.Columns; j++)
+                    nextGrid[i, j].IsAlive = DetermineIfAlive(i, j);
 
-    public class HexCell
-    {
-        public bool IsAlive { get; set; }
+            Grid = nextGrid;
+        }
+
+        private bool DetermineIfAlive(int i, int j)
+        {
+            var nCount = Grid.CountLiveNeighbors(i, j);
+            return DetermineIfAlive(i, j, nCount);
+        }
+
+        private bool DetermineIfAlive(int i, int j, int nCount)
+        {
+            return Grid[i, j].IsAlive
+                ? DetermineIfSurvives(nCount)
+                : DetermineIfBorns(nCount);
+        }
+
+        private bool DetermineIfSurvives(int nCount) =>
+            SurviveNeighborCount.Contains(nCount);
+
+        private bool DetermineIfBorns(int nCount) =>
+            BornNeighborCount.Contains(nCount);
+
+        private HexCell GetCenterCell() =>
+            Grid[Grid.Rows / 2, Grid.Columns / 2];
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
 namespace HexLife
@@ -12,6 +10,18 @@ namespace HexLife
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        private void SKCanvasView_OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        {
+            var canvas = e.Surface.Canvas;
+            var paint = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = Color.Red.ToSKColor(),
+                StrokeWidth = 25
+            };
+            canvas.DrawCircle(e.Info.Width / 2, e.Info.Height / 2, 100, paint);
         }
     }
 }

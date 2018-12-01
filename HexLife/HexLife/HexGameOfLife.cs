@@ -5,15 +5,16 @@ namespace HexLife
 {
     public class HexGameOfLife
     {
-        public HexGrid Grid { get; private set; }
-
-        public int[] SurviveNeighborCount = {2, 4};
-        public int[] BornNeighborCount = {1, 2};
-
         public HexGameOfLife(int width, int height)
         {
+            // In a grid, rows are vertical and columns are horizontal
             Grid = new HexGrid(height, width);
         }
+
+        public HexGrid Grid { get; private set; }
+
+        public int[] BornNeighborCount { get; set; } = {1, 2};
+        public int[] SurviveNeighborCount { get; set; } = {2, 4};
 
         public void ResetToSingleCell()
         {
@@ -42,13 +43,13 @@ namespace HexLife
         {
             return Grid[i, j].IsAlive
                 ? DetermineIfSurvives(nCount)
-                : DetermineIfBorns(nCount);
+                : DetermineIfIsBorn(nCount);
         }
 
         private bool DetermineIfSurvives(int nCount) =>
             SurviveNeighborCount.Contains(nCount);
 
-        private bool DetermineIfBorns(int nCount) =>
+        private bool DetermineIfIsBorn(int nCount) =>
             BornNeighborCount.Contains(nCount);
 
         private HexCell GetCenterCell() =>

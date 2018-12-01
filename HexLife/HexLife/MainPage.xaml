@@ -8,7 +8,10 @@
     >
 
     <Grid>
-        <sk:SKCanvasView PaintSurface="SKCanvasView_OnPaintSurface" />
+        <sk:SKCanvasView
+            x:Name="Canvas"
+            PaintSurface="SKCanvasView_OnPaintSurface"
+            />
     </Grid>
 
 </ContentPage>

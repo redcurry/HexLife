@@ -69,6 +69,31 @@ namespace HexLife
 
         private void DrawCell(SKCanvas canvas, int i, int j, SKPaint paint)
         {
+            var (x, y) = GetCanvasCoords(i, j);
+            DrawCircle(canvas, x, y, paint);
+            // DrawHexagon(canvas, x, y, paint);
+        }
+
+        private void DrawCircle(SKCanvas canvas, float x, float y, SKPaint paint) =>
+            canvas.DrawCircle(x, y, CellRadius, paint);
+
+        private void DrawHexagon(SKCanvas canvas, float x, float y, SKPaint paint)
+        {
+            var path = new SKPath();
+
+            path.MoveTo(x, y - 2 * CellRadius / Sqrt3);
+            path.LineTo(x + CellRadius, y - CellRadius / Sqrt3);
+            path.LineTo(x + CellRadius, y + CellRadius / Sqrt3);
+            path.LineTo(x, y + 2 * CellRadius / Sqrt3);
+            path.LineTo(x - CellRadius, y + CellRadius / Sqrt3);
+            path.LineTo(x - CellRadius, y - CellRadius / Sqrt3);
+            path.Close();
+
+            canvas.DrawPath(path, paint);
+        }
+
+        private (float, float) GetCanvasCoords(int i, int j)
+        {
             float x, y;
 
             if (i % 2 == 0)
@@ -82,7 +107,7 @@ namespace HexLife
                 y = i * Sqrt3TimesCellRadius + CellRadius;
             }
 
-            canvas.DrawCircle(x, y, CellRadius, paint);
+            return (x, y);
         }
     }
 }

@@ -62,6 +62,6 @@
         private int J(int j) => j + 1;
 
         private void InitializeGrid() =>
-            _grid = new HexCell[Rows + 1, Columns + 1];
+            _grid = new HexCell[Rows + 2, Columns + 2];
     }
 }

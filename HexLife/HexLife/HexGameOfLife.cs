@@ -5,10 +5,13 @@ namespace HexLife
 {
     public class HexGameOfLife
     {
+        private HexGrid _nextGrid;
+
         public HexGameOfLife(int width, int height)
         {
             // In a grid, rows are vertical and columns are horizontal
             Grid = new HexGrid(height, width);
+            _nextGrid = new HexGrid(height, width);
         }
 
         public HexGrid Grid { get; private set; }
@@ -19,18 +22,18 @@ namespace HexLife
         public void ResetToSingleCell()
         {
             Grid.Clear();
-            GetCenterCell().IsAlive = true;
+            SetCenterCellAlive();
         }
 
         public void MakeNextGeneration()
         {
-            var nextGrid = new HexGrid(Grid.Rows, Grid.Columns);
-
             for (int i = 0; i < Grid.Rows; i++)
                 for (int j = 0; j < Grid.Columns; j++)
-                    nextGrid[i, j].IsAlive = DetermineIfAlive(i, j);
+                    _nextGrid.SetIsAlive(i, j, DetermineIfAlive(i, j));
 
-            Grid = nextGrid;
+            var temp = Grid;
+            Grid = _nextGrid;
+            _nextGrid = temp;
         }
 
         private bool DetermineIfAlive(int i, int j)
@@ -41,7 +44,7 @@ namespace HexLife
 
         private bool DetermineIfAlive(int i, int j, int nCount)
         {
-            return Grid[i, j].IsAlive
+            return Grid.IsAlive(i, j)
                 ? DetermineIfSurvives(nCount)
                 : DetermineIfIsBorn(nCount);
         }
@@ -52,7 +55,7 @@ namespace HexLife
         private bool DetermineIfIsBorn(int nCount) =>
             BornNeighborCount.Contains(nCount);
 
-        private HexCell GetCenterCell() =>
-            Grid[Grid.Rows / 2, Grid.Columns / 2];
+        private void SetCenterCellAlive() =>
+            Grid.SetIsAlive(Grid.Rows / 2, Grid.Columns / 2, true);
     }
 }

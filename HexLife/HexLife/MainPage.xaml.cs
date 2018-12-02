@@ -10,20 +10,26 @@ namespace HexLife
     {
         private readonly HexGameOfLife _gol;
 
+        private readonly Benchmark _benchmark;
+
         public MainPage()
         {
             InitializeComponent();
 
-            _gol = new HexGameOfLife(100, 100);
+            _gol = new HexGameOfLife(1000, 1000);
             _gol.ResetToSingleCell();
 
-            var timer = new Timer(1000);
-            timer.Elapsed += (sender, args) =>
+            _benchmark = new Benchmark();
+
+            Device.StartTimer(TimeSpan.FromMilliseconds(0), () =>
             {
+                _benchmark.Start();
                 _gol.MakeNextGeneration();
+                _benchmark.Stop();
+
                 Canvas.InvalidateSurface();
-            };
-            timer.Start();
+                return true;
+            });
         }
 
         private void SKCanvasView_OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
@@ -35,14 +41,14 @@ namespace HexLife
             for (var i = 0; i < grid.Rows; i++)
                 for (var j = 0; j < grid.Columns; j++)
                 {
-                    if (grid[i, j].IsAlive)
+                    if (grid.IsAlive(i, j))
                         DrawCell(canvas, i, j);
                 }
         }
 
         private void DrawCell(SKCanvas canvas, int i, int j)
         {
-            const int CellRadius = 8;
+            const int CellRadius = 1;
 
             var paint = new SKPaint
             {

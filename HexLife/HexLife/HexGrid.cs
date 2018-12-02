@@ -21,8 +21,6 @@ namespace HexLife
         public int Rows { get; }
         public int Columns { get; }
 
-        public HexCell this[int i, int j] => _grid[i, j];
-
         public void Clear()
         {
             for (int i = 0; i < Rows; i++)
@@ -30,22 +28,24 @@ namespace HexLife
                 _grid[i, j].IsAlive = false;
         }
 
+        public void SetIsAlive(int i, int j, bool isAlive) =>
+            _grid[i, j].IsAlive = isAlive;
+
+        public bool IsAlive(int i, int j) =>
+            _grid[i, j].IsAlive;
+
         public int CountLiveNeighbors(int i, int j)
         {
-            return new[]
-                {
-                    ExistsAndIsAlive(i - 1, j),
-                    ExistsAndIsAlive(i + 1, j),
-                    ExistsAndIsAlive(i, j - 1),
-                    ExistsAndIsAlive(i, j + 1),
-                    i % 2 == 1
-                        ? ExistsAndIsAlive(i - 1, j + 1)
-                        : ExistsAndIsAlive(i - 1, j - 1),
-                    i % 2 == 1
-                        ? ExistsAndIsAlive(i + 1, j + 1)
-                        : ExistsAndIsAlive(i + 1, j - 1),
-                }
-                .Select(BoolToInt).Sum();
+            return BoolToInt(ExistsAndIsAlive(i - 1, j)) +
+                   BoolToInt(ExistsAndIsAlive(i + 1, j)) +
+                   BoolToInt(ExistsAndIsAlive(i, j - 1)) +
+                   BoolToInt(ExistsAndIsAlive(i, j + 1)) +
+                   BoolToInt(i % 2 == 1
+                       ? ExistsAndIsAlive(i - 1, j + 1)
+                       : ExistsAndIsAlive(i - 1, j - 1)) +
+                   BoolToInt(i % 2 == 1
+                       ? ExistsAndIsAlive(i + 1, j + 1)
+                       : ExistsAndIsAlive(i + 1, j - 1));
         }
 
         private bool ExistsAndIsAlive(int i, int j) =>

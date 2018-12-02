@@ -50,7 +50,7 @@ namespace HexLife
         private void SKCanvasView_OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
             var canvas = e.Surface.Canvas;
-            canvas.Clear();
+            canvas.Clear(SKColors.Black);
 
             var paint = new SKPaint
             {

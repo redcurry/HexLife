@@ -8,10 +8,11 @@ namespace HexLife
 {
     public partial class MainPage : ContentPage
     {
-        private const int CellRadius = 4;
         private const float Sqrt3 = 1.732050807568877f;
-        private const float Sqrt3TimesCellRadius = Sqrt3 * CellRadius;
-        private const float TwoTimesCellRadius = 2 * CellRadius;
+
+        private float CellRadius;
+        private float Sqrt3TimesCellRadius;
+        private float TwoTimesCellRadius;
 
         private HexGameOfLife _gol;
 
@@ -22,12 +23,16 @@ namespace HexLife
         {
             InitializeComponent();
 
-            _gol = new HexGameOfLife(200, 200);
             _benchmark = new Benchmark();
         }
 
         private void StartButton_OnClicked(object sender, EventArgs e)
         {
+            CellRadius = Canvas.CanvasSize.Width / 200 / 2;
+            Sqrt3TimesCellRadius = Sqrt3 * CellRadius;
+            TwoTimesCellRadius = 2 * CellRadius;
+
+            _gol = new HexGameOfLife(200, 200);
             _gol.ResetToSingleCell();
             _isPlaying = true;
 
@@ -49,6 +54,8 @@ namespace HexLife
 
         private void SKCanvasView_OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
+            if (_gol == null) return;
+
             var canvas = e.Surface.Canvas;
             canvas.Clear(SKColors.Black);
 

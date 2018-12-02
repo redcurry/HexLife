@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace HexLife
 {
@@ -16,8 +15,8 @@ namespace HexLife
 
         public HexGrid Grid { get; private set; }
 
-        public int[] BornNeighborCount { get; set; } = {1, 2};
-        public int[] SurviveNeighborCount { get; set; } = {2, 4};
+        public bool[] IsBorn = {false, true, true, false, false, false, false};
+        public bool[] Survives = {false, false, true, false, true, false, false};
 
         public void ResetToSingleCell()
         {
@@ -29,7 +28,10 @@ namespace HexLife
         {
             for (int i = 0; i < Grid.Rows; i++)
                 for (int j = 0; j < Grid.Columns; j++)
-                    _nextGrid.SetIsAlive(i, j, DetermineIfAlive(i, j));
+                {
+                    var isAlive = DetermineIfAlive(i, j);
+                    _nextGrid.SetIsAlive(i, j, isAlive);
+                }
 
             var temp = Grid;
             Grid = _nextGrid;
@@ -38,7 +40,7 @@ namespace HexLife
 
         private bool DetermineIfAlive(int i, int j)
         {
-            var nCount = Grid.CountLiveNeighbors(i, j);
+            var nCount = Grid.Neighbors(i, j);
             return DetermineIfAlive(i, j, nCount);
         }
 
@@ -50,10 +52,10 @@ namespace HexLife
         }
 
         private bool DetermineIfSurvives(int nCount) =>
-            SurviveNeighborCount.Contains(nCount);
+            Survives[nCount];
 
         private bool DetermineIfIsBorn(int nCount) =>
-            BornNeighborCount.Contains(nCount);
+            IsBorn[nCount];
 
         private void SetCenterCellAlive() =>
             Grid.SetIsAlive(Grid.Rows / 2, Grid.Columns / 2, true);

@@ -1,7 +1,8 @@
 ﻿namespace HexLife
 {
-    public class HexCell
+    public struct HexCell
     {
-        public bool IsAlive { get; set; }
+        public bool IsAlive;
+        public int Neighbors;
     }
 }

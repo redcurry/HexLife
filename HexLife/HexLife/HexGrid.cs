@@ -1,57 +1,67 @@
-﻿using System.Linq;
-
-namespace HexLife
+﻿namespace HexLife
 {
     public class HexGrid
     {
-        private readonly HexCell[,] _grid;
+        private HexCell[,] _grid;
 
         public HexGrid(int rows, int cols)
         {
             Rows = rows;
             Columns = cols;
 
-            _grid = new HexCell[rows, cols];
-
-            for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                _grid[i, j] = new HexCell();
+            InitializeGrid();
         }
 
         public int Rows { get; }
         public int Columns { get; }
 
-        public void Clear()
-        {
-            for (int i = 0; i < Rows; i++)
-            for (int j = 0; j < Columns; j++)
-                _grid[i, j].IsAlive = false;
-        }
+        public void Clear() =>
+            InitializeGrid();
 
-        public void SetIsAlive(int i, int j, bool isAlive) =>
-            _grid[i, j].IsAlive = isAlive;
+        public void SetIsAlive(int i, int j, bool isAlive)
+        {
+            var ii = i + 1;  // == I(i)
+            var jj = j + 1;  // == J(j)
+
+            var iiPlus1 = i + 2;
+            var iiMinus1 = i;
+            var jjPlus1 = j + 2;
+            var jjMinus1 = j;
+
+            // Do nothing if alive value doesn't change
+            if (_grid[ii, jj].IsAlive == isAlive) return;
+
+            _grid[ii, jj].IsAlive = isAlive;
+
+            var neighbors = isAlive ? 1 : -1;
+
+            _grid[iiMinus1, jj].Neighbors += neighbors;
+            _grid[iiPlus1, jj].Neighbors += neighbors;
+            _grid[ii, jjMinus1].Neighbors += neighbors;
+            _grid[ii, jjPlus1].Neighbors += neighbors;
+
+            if (i % 2 == 1)  // i (not ii) because it's not accessing grid
+            {
+                _grid[iiMinus1, jjPlus1].Neighbors += neighbors;
+                _grid[iiPlus1, jjPlus1].Neighbors += neighbors;
+            }
+            else
+            {
+                _grid[iiMinus1, jjMinus1].Neighbors += neighbors;
+                _grid[iiPlus1, jjMinus1].Neighbors += neighbors;
+            }
+        }
 
         public bool IsAlive(int i, int j) =>
-            _grid[i, j].IsAlive;
+            _grid[I(i), J(j)].IsAlive;
 
-        public int CountLiveNeighbors(int i, int j)
-        {
-            return BoolToInt(ExistsAndIsAlive(i - 1, j)) +
-                   BoolToInt(ExistsAndIsAlive(i + 1, j)) +
-                   BoolToInt(ExistsAndIsAlive(i, j - 1)) +
-                   BoolToInt(ExistsAndIsAlive(i, j + 1)) +
-                   BoolToInt(i % 2 == 1
-                       ? ExistsAndIsAlive(i - 1, j + 1)
-                       : ExistsAndIsAlive(i - 1, j - 1)) +
-                   BoolToInt(i % 2 == 1
-                       ? ExistsAndIsAlive(i + 1, j + 1)
-                       : ExistsAndIsAlive(i + 1, j - 1));
-        }
+        public int Neighbors(int i, int j) =>
+            _grid[I(i), J(j)].Neighbors;
 
-        private bool ExistsAndIsAlive(int i, int j) =>
-            i >= 0 && i < Rows && j >= 0 && j < Columns && _grid[i, j].IsAlive;
+        private int I(int i) => i + 1;
+        private int J(int j) => j + 1;
 
-        private int BoolToInt(bool b) =>
-            b ? 1 : 0;
+        private void InitializeGrid() =>
+            _grid = new HexCell[Rows + 1, Columns + 1];
     }
 }

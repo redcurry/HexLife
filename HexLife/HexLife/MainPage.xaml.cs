@@ -13,18 +13,23 @@ namespace HexLife
         private const float Sqrt3TimesCellRadius = Sqrt3 * CellRadius;
         private const float TwoTimesCellRadius = 2 * CellRadius;
 
-        private readonly HexGameOfLife _gol;
+        private HexGameOfLife _gol;
 
-        private readonly Benchmark _benchmark;
+        private Benchmark _benchmark;
+        private bool _isPlaying;
 
         public MainPage()
         {
             InitializeComponent();
 
             _gol = new HexGameOfLife(200, 200);
-            _gol.ResetToSingleCell();
-
             _benchmark = new Benchmark();
+        }
+
+        private void StartButton_OnClicked(object sender, EventArgs e)
+        {
+            _gol.ResetToSingleCell();
+            _isPlaying = true;
 
             Device.StartTimer(TimeSpan.FromMilliseconds(0), () =>
             {
@@ -33,8 +38,13 @@ namespace HexLife
                 _benchmark.Stop();
 
                 Canvas.InvalidateSurface();
-                return true;
+                return _isPlaying;
             });
+        }
+
+        private void StopButton_OnClicked(object sender, EventArgs e)
+        {
+            _isPlaying = false;
         }
 
         private void SKCanvasView_OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)

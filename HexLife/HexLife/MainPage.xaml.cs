@@ -8,7 +8,7 @@ namespace HexLife
 {
     public partial class MainPage : ContentPage
     {
-        private const int CellRadius = 1;
+        private const int CellRadius = 4;
         private const float Sqrt3 = 1.732050807568877f;
         private const float Sqrt3TimesCellRadius = Sqrt3 * CellRadius;
         private const float TwoTimesCellRadius = 2 * CellRadius;
@@ -21,7 +21,7 @@ namespace HexLife
         {
             InitializeComponent();
 
-            _gol = new HexGameOfLife(1000, 1000);
+            _gol = new HexGameOfLife(200, 200);
             _gol.ResetToSingleCell();
 
             _benchmark = new Benchmark();

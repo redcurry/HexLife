@@ -101,19 +101,8 @@ namespace HexLife
 
         private (float, float) GetCanvasCoords(int i, int j)
         {
-            float x, y;
-
-            if (i % 2 == 0)
-            {
-                x = j * TwoTimesCellRadius + CellRadius;
-                y = i * Sqrt3TimesCellRadius + CellRadius;
-            }
-            else
-            {
-                x = j * TwoTimesCellRadius + TwoTimesCellRadius;
-                y = i * Sqrt3TimesCellRadius + CellRadius;
-            }
-
+            var x = j * TwoTimesCellRadius + CellRadius * (i % 2);
+            var y = i * Sqrt3TimesCellRadius;
             return (x, y);
         }
     }

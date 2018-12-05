@@ -16,14 +16,11 @@ namespace HexLife
 
         private HexGameOfLife _gol;
 
-        private Benchmark _benchmark;
         private bool _isPlaying;
 
         public MainPage()
         {
             InitializeComponent();
-
-            _benchmark = new Benchmark();
         }
 
         private void StartButton_OnClicked(object sender, EventArgs e)
@@ -38,9 +35,7 @@ namespace HexLife
 
             Device.StartTimer(TimeSpan.FromMilliseconds(0), () =>
             {
-                _benchmark.Start();
                 _gol.MakeNextGeneration();
-                _benchmark.Stop();
 
                 Canvas.InvalidateSurface();
                 return _isPlaying;

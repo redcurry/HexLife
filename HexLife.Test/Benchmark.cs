@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace HexLife
+namespace HexLife.Test
 {
     public class Benchmark
     {

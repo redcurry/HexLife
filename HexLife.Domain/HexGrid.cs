@@ -1,4 +1,4 @@
-﻿namespace HexLife
+﻿namespace HexLife.Domain
 {
     public class HexGrid
     {

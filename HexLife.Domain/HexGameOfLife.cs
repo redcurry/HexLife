@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace HexLife
+﻿namespace HexLife.Domain
 {
     public class HexGameOfLife
     {

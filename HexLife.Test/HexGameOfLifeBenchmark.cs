@@ -1,3 +1,4 @@
+using HexLife.Domain;
 using NUnit.Framework;
 
 namespace HexLife.Test

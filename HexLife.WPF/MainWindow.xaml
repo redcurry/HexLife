@@ -11,6 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Button
@@ -22,8 +23,13 @@
             Content="Stop"
             Click="StopButton_OnClicked"
             />
-        <sk:SKElement
+        <Button
             Grid.Row="2"
+            Content="Save"
+            Click="SaveButton_OnClicked"
+            />
+        <sk:SKElement
+            Grid.Row="3"
             x:Name="Canvas"
             PaintSurface="Canvas_OnPaintSurface"
             />

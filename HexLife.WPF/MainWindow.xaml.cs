@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using HexLife.Domain;
+using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 
 namespace HexLife.WPF
@@ -63,6 +64,19 @@ namespace HexLife.WPF
 
             var canvas = e.Surface.Canvas;
             _hexPainter.DrawGrid(_gol.Grid, canvas, _cellRadius);
+        }
+
+        private void SaveButton_OnClicked(object sender, RoutedEventArgs e)
+        {
+            var width = Canvas.CanvasSize.Width;
+            var bounds = SKRect.Create(0, 0, width, width);
+
+            using (var stream = new SKFileWStream(@"C:\Temp\grid.svg"))
+            using (var writer = new SKXmlStreamWriter(stream))
+            using (var canvas = SKSvgCanvas.Create(bounds, writer))
+            {
+                _hexPainter.DrawGrid(_gol.Grid, canvas, _cellRadius);
+            }
         }
     }
 }

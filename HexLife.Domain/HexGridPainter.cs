@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using SkiaSharp;
+﻿using SkiaSharp;
 
 namespace HexLife.Domain
 {
@@ -31,8 +27,8 @@ namespace HexLife.Domain
         private void DrawCell(SKCanvas canvas, int i, int j, SKPaint paint, float cellRadius)
         {
             var (x, y) = GetCanvasCoords(i, j, cellRadius);
-            DrawCircle(canvas, x, y, paint, cellRadius);
-            // DrawHexagon(canvas, x, y, paint);
+            //DrawCircle(canvas, x, y, paint, cellRadius);
+            DrawHexagon(canvas, x, y, paint, cellRadius);
         }
 
         private void DrawCircle(SKCanvas canvas, float x, float y, SKPaint paint, float cellRadius) =>

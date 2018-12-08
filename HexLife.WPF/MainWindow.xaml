@@ -4,9 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HexLife.WPF"
+        xmlns:sk="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button
+            Content="Start"
+            Click="StartButton_OnClicked"
+            />
+        <Button
+            Grid.Row="1"
+            Content="Stop"
+            Click="StopButton_OnClicked"
+            />
+        <sk:SKElement
+            Grid.Row="2"
+            x:Name="Canvas"
+            PaintSurface="Canvas_OnPaintSurface"
+            />
     </Grid>
 </Window>
